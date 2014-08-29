@@ -9,7 +9,11 @@ Go have special direcotry structure. i love it so other languages want to use it
 
 ## install
 
+for macOS
+
 ```
+$ brew tap satoshun/commands
+$ brew install go-git
 ```
 
 ## Usage

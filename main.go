@@ -78,7 +78,7 @@ func CloneDirectory(d, s string) string {
 func main() {
 	app := cli.NewApp()
 	app.Name = "go-git"
-	app.Version = "0.0.2"
+	app.Version = "0.0.3"
 	app.Usage = "use directory like Go"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{

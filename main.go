@@ -59,8 +59,7 @@ func HookCmd(maps map[string]string) (cmd *exec.Cmd) {
 	return
 }
 
-func CloneDirectory(d string) string {
-	s := os.Getenv("GO_GIT_PATH")
+func CloneDirectory(d, s string) string {
 	if s == "" {
 		return "."
 	}
@@ -78,6 +77,10 @@ func main() {
 			Name:  "repository, r",
 			Usage: "repository url",
 		},
+		cli.StringFlag{
+			Name:  "base, b",
+			Usage: "define git path",
+		},
 	}
 
 	app.Action = func(c *cli.Context) {
@@ -86,7 +89,11 @@ func main() {
 			fmt.Println("please set repository option: -r or -repository")
 			return
 		}
-		directory := CloneDirectory(repository)
+		s := c.String("base")
+		if s == "" {
+			s = os.Getenv("GO_GIT_PATH")
+		}
+		directory := CloneDirectory(repository, s)
 
 		cmd := CloneCmd(repository, directory)
 		err := cmd.Run()

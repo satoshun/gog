@@ -43,6 +43,14 @@ func CloneCmd(s string, directory string) (cmd *exec.Cmd) {
 	return
 }
 
+func UpdateCmd(s string, directory string) (cmd *exec.Cmd) {
+	cmd = exec.Command("git", "pull")
+	cmd.Dir = directory
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return
+}
+
 func HookCmd(maps map[string]string) (cmd *exec.Cmd) {
 	s := os.Getenv("GO_GIT_HOOK_CMD")
 	if s == "" {
@@ -81,6 +89,10 @@ func main() {
 			Name:  "base, b",
 			Usage: "define git path",
 		},
+		cli.BoolFlag{
+			Name:  "update, u",
+			Usage: "update repository",
+		},
 	}
 
 	app.Action = func(c *cli.Context) {
@@ -95,27 +107,34 @@ func main() {
 		}
 		directory := CloneDirectory(repository, s)
 
-		cmd := CloneCmd(repository, directory)
+		var cmd *exec.Cmd
+		if c.Bool("update") {
+			cmd = UpdateCmd(repository, directory)
+		} else {
+			cmd = CloneCmd(repository, directory)
+		}
 		err := cmd.Run()
 		if err != nil {
-			fmt.Println("fail clone command:", err)
+			fmt.Println("fail command:", err)
 			return
 		}
 
-		host, p, base := SplitRepo(repository)
-		cmd = HookCmd(map[string]string{
-			"Directory":   directory,
-			"Repository":  repository,
-			"Host":        host,
-			"Path":        p,
-			"ProjectName": base,
-		})
+		if !c.Bool("update") {
+			host, p, base := SplitRepo(repository)
+			cmd = HookCmd(map[string]string{
+				"Directory":   directory,
+				"Repository":  repository,
+				"Host":        host,
+				"Path":        p,
+				"ProjectName": base,
+			})
 
-		if cmd != nil {
-			err = cmd.Run()
-			if err != nil {
-				fmt.Println("fail hook command:", cmd, err)
-				return
+			if cmd != nil {
+				err = cmd.Run()
+				if err != nil {
+					fmt.Println("fail hook command:", cmd, err)
+					return
+				}
 			}
 		}
 	}

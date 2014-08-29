@@ -57,8 +57,14 @@ GLOBAL OPTIONS:
    --repository, -r ''  repository url
    --version, -v  print the version
 
+# clone
 $ go-git -r git@github.com:satoshun/go-git.git
 Cloning into '/Users/satouhayabusa/git/src/github.com/satoshun/go-git'...
 warning: You appear to have cloned an empty repository.
 Checking connectivity... done.
+
+# update
+$ go run main.go -r git@github.com:satoshun/pythonjs.git -u
+First, rewinding head to replay your work on top of it...
+Fast-forwarded master to 85d86acef567a9729e025defe895df6ee4aa35f7.
 ```

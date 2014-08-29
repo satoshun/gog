@@ -101,9 +101,12 @@ func main() {
 			fmt.Println("please set repository option: -r or -repository")
 			return
 		}
-		s := c.String("base")
-		if s == "" {
-			s = os.Getenv("GO_GIT_PATH")
+		var s string
+		for _, ca := range [...]string{c.String("base"), os.Getenv("GO_GIT_PATH"), os.Getenv("GOPATH")} {
+			if ca != "" {
+				s = ca
+				break
+			}
 		}
 		directory := CloneDirectory(repository, s)
 

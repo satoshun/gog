@@ -22,14 +22,14 @@ $ brew install gog
 
 ```
 # first set base directory
-$ export GO_GIT_PATH=~/git
+$ export GOG_PATH=~/git
 
 # option variable
-## if `GO_GIT_HOOK_CMD` variable then run `GO_GIT_HOOK_CMD` before ending.
-$ export GO_GIT_HOOK_CMD="cd {{.Directory}} && git status"
+## if `GOG_HOOK_CMD` variable then run `GOG_HOOK_CMD` before ending.
+$ export GOG_HOOK_CMD="cd {{.Directory}} && git status"
 ```
 
-`GO_GIT_HOOK_CMD` has been prepared under variables.
+`GOG_HOOK_CMD` has been prepared under variables.
 
 - Directory
 - Repository

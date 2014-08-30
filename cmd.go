@@ -32,7 +32,7 @@ func LogCmd(directory string) (cmd *exec.Cmd) {
 }
 
 func HookCmd(maps map[string]string) (cmd *exec.Cmd) {
-	s := os.Getenv("GO_GIT_HOOK_CMD")
+	s := os.Getenv("GOG_HOOK_CMD")
 	if s == "" {
 		return nil
 	}

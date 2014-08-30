@@ -41,7 +41,7 @@ func ProjectDir(c *cli.Context, d string) string {
 }
 
 func BasePath(c *cli.Context) string {
-	for _, ca := range [...]string{c.String("base"), os.Getenv("GO_GIT_PATH"), os.Getenv("GOPATH")} {
+	for _, ca := range [...]string{c.String("base"), os.Getenv("GOG_PATH"), os.Getenv("GOPATH")} {
 		if ca != "" {
 			return ca
 		}

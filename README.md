@@ -29,7 +29,7 @@ $ export GO_GIT_PATH=~/git
 $ export GO_GIT_HOOK_CMD="cd {{.Directory}} && git status"
 ```
 
-`GO_GIT_HOOK_CMD` has been prepared under variables. 
+`GO_GIT_HOOK_CMD` has been prepared under variables.
 
 - Directory
 - Repository
@@ -48,23 +48,26 @@ USAGE:
    go-git [global options] command [command options] [arguments...]
 
 VERSION:
-   0.0.1
+   0.1.0
 
 COMMANDS:
+   get, g clone repository
+   update, u  update repository
    help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --repository, -r ''  repository url
+   --base, -b ''  define git path
    --version, -v  print the version
+   --help, -h   show help
 
 # clone
-$ go-git -r git@github.com:satoshun/go-git.git
+$ go-git get git@github.com:satoshun/go-git.git
 Cloning into '/Users/satouhayabusa/git/src/github.com/satoshun/go-git'...
 warning: You appear to have cloned an empty repository.
 Checking connectivity... done.
 
 # update
-$ go run main.go -r git@github.com:satoshun/pythonjs.git -u
+$ go-git update git@github.com:satoshun/pythonjs.git
 First, rewinding head to replay your work on top of it...
 Fast-forwarded master to 85d86acef567a9729e025defe895df6ee4aa35f7.
 ```

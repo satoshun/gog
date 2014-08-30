@@ -112,8 +112,7 @@ func main() {
 				if repository == "" {
 					// all update
 					var wg sync.WaitGroup
-					directories := GitDiretories(SrcPath(c))
-					for _, d := range directories {
+					for _, d := range GitDiretories(SrcPath(c)) {
 						fmt.Println("update", d)
 						wg.Add(1)
 						go func(d string) {
@@ -133,6 +132,18 @@ func main() {
 				if err != nil {
 					log.Println("fail command:", err)
 					return
+				}
+			},
+		},
+		{
+			Name:      "list",
+			ShortName: "l",
+			Usage:     "list clone repository",
+			Action: func(c *cli.Context) {
+				srcPath := SrcPath(c) + "/"
+				for _, d := range GitDiretories(SrcPath(c)) {
+					fmt.Printf("%s\t", strings.TrimPrefix(d, srcPath))
+					LogCmd(d).Run()
 				}
 			},
 		},

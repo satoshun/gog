@@ -22,6 +22,15 @@ func UpdateCmd(directory string) (cmd *exec.Cmd) {
 	return
 }
 
+func LogCmd(directory string) (cmd *exec.Cmd) {
+	args := []string{"--no-pager", "log", "-1", "--oneline"}
+	cmd = exec.Command("git", args...)
+	cmd.Dir = directory
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return
+}
+
 func HookCmd(maps map[string]string) (cmd *exec.Cmd) {
 	s := os.Getenv("GO_GIT_HOOK_CMD")
 	if s == "" {

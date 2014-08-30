@@ -1,11 +1,11 @@
-# go-git
+# gog
 
-this is tools for used convenience git like go. i called go-git.
+this is tools for used convenience git like go. i called gog.
 
 
 ## Description
 
-Go have special direcotry structure. i love it so other languages want to use it. go-git achieve it.
+Go have special direcotry structure. i love it so other languages want to use it. gog achieve it.
 
 ## install
 
@@ -13,7 +13,7 @@ for macOS
 
 ```
 $ brew tap satoshun/commands
-$ brew install go-git
+$ brew install gog
 ```
 
 ## Usage
@@ -40,12 +40,12 @@ $ export GO_GIT_HOOK_CMD="cd {{.Directory}} && git status"
 ### do
 
 ```
-$ go-git -h
+$ gog -h
 NAME:
-   go-git - use directory like Go
+   gog - use directory like Go
 
 USAGE:
-   go-git [global options] command [command options] [arguments...]
+   gog [global options] command [command options] [arguments...]
 
 VERSION:
    0.2.0
@@ -62,13 +62,13 @@ GLOBAL OPTIONS:
    --help, -h   show help
 
 # clone
-$ go-git get git@github.com:satoshun/go-git.git
-Cloning into '/Users/satouhayabusa/git/src/github.com/satoshun/go-git'...
+$ gog get git@github.com:satoshun/gog.git
+Cloning into '/Users/satouhayabusa/git/src/github.com/satoshun/gog'...
 warning: You appear to have cloned an empty repository.
 Checking connectivity... done.
 
 # update
-$ go-git update git@github.com:satoshun/pythonjs.git
+$ gog update git@github.com:satoshun/pythonjs.git
 First, rewinding head to replay your work on top of it...
 Fast-forwarded master to 85d86acef567a9729e025defe895df6ee4aa35f7.
 ```

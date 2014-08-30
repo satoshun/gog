@@ -48,11 +48,12 @@ USAGE:
    go-git [global options] command [command options] [arguments...]
 
 VERSION:
-   0.1.0
+   0.2.0
 
 COMMANDS:
    get, g clone repository
    update, u  update repository
+   list, l  list clone repository
    help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:

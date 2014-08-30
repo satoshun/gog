@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/url"
 	"os"
 	"path"
 	"strings"
+	"sync"
 
 	"github.com/codegangsta/cli"
 )
@@ -33,15 +35,12 @@ func SplitRepo(s string) (host, p, base string) {
 	return
 }
 
-func CloneDirectory(d, s string) string {
-	if s == "" {
-		return "."
-	}
+func ProjectDir(c *cli.Context, d string) string {
 	host, p, _ := SplitRepo(d)
-	return path.Join(s, "src", host, p)
+	return path.Join(SrcPath(c), host, p)
 }
 
-func Path(c *cli.Context) string {
+func BasePath(c *cli.Context) string {
 	for _, ca := range [...]string{c.String("base"), os.Getenv("GO_GIT_PATH"), os.Getenv("GOPATH")} {
 		if ca != "" {
 			return ca
@@ -49,6 +48,10 @@ func Path(c *cli.Context) string {
 	}
 
 	return "./"
+}
+
+func SrcPath(c *cli.Context) string {
+	return path.Join(BasePath(c), "src")
 }
 
 func main() {
@@ -70,16 +73,15 @@ func main() {
 			Action: func(c *cli.Context) {
 				repository := c.Args().First()
 				if repository == "" {
-					fmt.Println("please set repository url")
+					log.Println("please set repository url")
 					return
 				}
 
-				s := Path(c)
-				directory := CloneDirectory(repository, s)
+				directory := ProjectDir(c, repository)
 				cmd := CloneCmd(repository, directory)
 				err := cmd.Run()
 				if err != nil {
-					fmt.Println("fail command:", err)
+					log.Println("fail command:", err)
 					return
 				}
 
@@ -95,7 +97,7 @@ func main() {
 				if cmd != nil {
 					err = cmd.Run()
 					if err != nil {
-						fmt.Println("fail hook command:", cmd, err)
+						log.Println("fail hook command:", cmd, err)
 						return
 					}
 				}
@@ -108,16 +110,28 @@ func main() {
 			Action: func(c *cli.Context) {
 				repository := c.Args().First()
 				if repository == "" {
-					fmt.Println("please set repository url")
+					// all update
+					var wg sync.WaitGroup
+					directories := GitDiretories(SrcPath(c))
+					for _, d := range directories {
+						fmt.Println("update", d)
+						wg.Add(1)
+						go func(d string) {
+							cmd := UpdateCmd(d)
+							cmd.Run()
+							wg.Done()
+						}(d)
+					}
+
+					wg.Wait()
 					return
 				}
-				s := Path(c)
-				directory := CloneDirectory(repository, s)
 
-				cmd := UpdateCmd(repository, directory)
+				directory := ProjectDir(c, repository)
+				cmd := UpdateCmd(directory)
 				err := cmd.Run()
 				if err != nil {
-					fmt.Println("fail command:", err)
+					log.Println("fail command:", err)
 					return
 				}
 			},

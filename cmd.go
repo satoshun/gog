@@ -14,7 +14,7 @@ func CloneCmd(s string, directory string) (cmd *exec.Cmd) {
 	return
 }
 
-func UpdateCmd(s string, directory string) (cmd *exec.Cmd) {
+func UpdateCmd(directory string) (cmd *exec.Cmd) {
 	cmd = exec.Command("git", "pull")
 	cmd.Dir = directory
 	cmd.Stdout = os.Stdout

@@ -8,24 +8,27 @@ import (
 )
 
 func CloneCmd(s string, directory string) (cmd *exec.Cmd) {
-	cmd = exec.Command("git", "clone", s, directory)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	args := []string{"clone", s, directory}
+	cmd = gitCmd(args)
 	return
 }
 
 func UpdateCmd(directory string) (cmd *exec.Cmd) {
-	cmd = exec.Command("git", "pull")
+	args := []string{"pull"}
+	cmd = gitCmd(args)
 	cmd.Dir = directory
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
 	return
 }
 
 func LogCmd(directory string) (cmd *exec.Cmd) {
 	args := []string{"--no-pager", "log", "-1", "--oneline"}
-	cmd = exec.Command("git", args...)
+	cmd = gitCmd(args)
 	cmd.Dir = directory
+	return
+}
+
+func gitCmd(args []string) (cmd *exec.Cmd) {
+	cmd = exec.Command("git", args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return
@@ -40,7 +43,12 @@ func HookCmd(maps map[string]string) (cmd *exec.Cmd) {
 	tmpl, _ := template.New("hook").Parse(s)
 	tmpl.Execute(&doc, maps)
 
-	cmd = exec.Command("/bin/sh", "-c", doc.String())
+	cmd = shellCmd(doc.String())
+	return
+}
+
+func shellCmd(script string) (cmd *exec.Cmd) {
+	cmd = exec.Command("/bin/sh", "-c", script)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 

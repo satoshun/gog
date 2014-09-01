@@ -50,7 +50,7 @@ func BasePath(c *cli.Context) string {
 }
 
 func SrcPath(c *cli.Context) string {
-	return path.Join(BasePath(c), "src")
+	return BasePath(c)
 }
 
 func main() {

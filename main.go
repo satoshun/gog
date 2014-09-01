@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/url"
 	"os"
 	"path"
@@ -73,7 +72,7 @@ func main() {
 			Action: func(c *cli.Context) {
 				repository := c.Args().First()
 				if repository == "" {
-					log.Println("please set repository url")
+					fmt.Println("please set repository url")
 					return
 				}
 
@@ -81,7 +80,7 @@ func main() {
 				cmd := CloneCmd(repository, directory)
 				err := cmd.Run()
 				if err != nil {
-					log.Println("fail command:", err)
+					fmt.Println("fail command:", err)
 					return
 				}
 
@@ -97,7 +96,7 @@ func main() {
 				if cmd != nil {
 					err = cmd.Run()
 					if err != nil {
-						log.Println("fail hook command:", cmd, err)
+						fmt.Println("fail hook command:", cmd, err)
 						return
 					}
 				}
@@ -130,7 +129,7 @@ func main() {
 				cmd := UpdateCmd(directory)
 				err := cmd.Run()
 				if err != nil {
-					log.Println("fail command:", err)
+					fmt.Println("fail command:", err)
 					return
 				}
 			},

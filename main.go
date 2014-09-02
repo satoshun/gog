@@ -14,8 +14,8 @@ import (
 
 // SplitRepo split url to host, path, basename
 func SplitRepo(u string) (host, p, basename string) {
-	if strings.HasPrefix(u, "git@") {
-		u = u[4:]
+	if i := strings.Index(u, "@"); i >= 0 {
+		u = u[i+1:]
 		tmp := strings.SplitN(u, ":", 2)
 		host, p = tmp[0], tmp[1]
 	} else {

@@ -12,17 +12,18 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-func SplitRepo(s string) (host, p, base string) {
-	if strings.HasPrefix(s, "git@") {
-		s = s[4:]
-		tmp := strings.SplitN(s, ":", 2)
+// SplitRepo split url to host, path, basename
+func SplitRepo(u string) (host, p, basename string) {
+	if strings.HasPrefix(u, "git@") {
+		u = u[4:]
+		tmp := strings.SplitN(u, ":", 2)
 		host, p = tmp[0], tmp[1]
 	} else {
-		u, _ := url.Parse(s)
+		u, _ := url.Parse(u)
 		host, p = u.Host, u.Path
 	}
 
-	// start /
+	// start
 	if !strings.HasPrefix(p, "/") {
 		p = "/" + p
 	}
@@ -30,7 +31,7 @@ func SplitRepo(s string) (host, p, base string) {
 	if strings.HasSuffix(p, ".git") {
 		p = p[:len(p)-4]
 	}
-	base = path.Base(p)
+	basename = path.Base(p)
 
 	return
 }

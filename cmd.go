@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"os/exec"
+	"strings"
 	"text/template"
 )
 
@@ -18,6 +19,22 @@ func UpdateCmd(directory string) (cmd *exec.Cmd) {
 	cmd = gitCmd(args)
 	cmd.Dir = directory
 	return
+}
+
+func OriginUrl(path string) string {
+	args := []string{"config", "--get", "remote.origin.url"}
+	cmd := exec.Command("git", args...)
+	output := new(bytes.Buffer)
+	cmd.Stdout = output
+	cmd.Stderr = output
+	cmd.Dir = path
+
+	err := cmd.Run()
+	if err != nil {
+		return ""
+	}
+
+	return strings.TrimSpace(output.String())
 }
 
 func LogCmd(directory string) (cmd *exec.Cmd) {

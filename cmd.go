@@ -8,6 +8,7 @@ import (
 	"text/template"
 )
 
+// CloneCmd is API of git clone cmd
 func CloneCmd(s string, directory string) (cmd *exec.Cmd) {
 	args := []string{"clone", s, directory}
 	cmd = gitCmd(args)
@@ -19,6 +20,22 @@ func UpdateCmd(directory string) (cmd *exec.Cmd) {
 	cmd = gitCmd(args)
 	cmd.Dir = directory
 	return
+}
+
+func CurrentBranch(path string) string {
+	args := []string{"rev-parse", "--abbrev-ref", "HEAD"}
+	cmd := exec.Command("git", args...)
+	output := new(bytes.Buffer)
+	cmd.Stdout = output
+	cmd.Stderr = output
+	cmd.Dir = path
+
+	err := cmd.Run()
+	if err != nil {
+		return ""
+	}
+
+	return strings.TrimSpace(output.String())
 }
 
 func OriginUrl(path string) string {

@@ -22,6 +22,13 @@ func UpdateCmd(directory string) (cmd *exec.Cmd) {
 	return
 }
 
+func UpdateCurrentCmd(directory string) (cmd *exec.Cmd) {
+	args := []string{"pull", "origin", CurrentBranch(directory)}
+	cmd = gitCmd(args)
+	cmd.Dir = directory
+	return
+}
+
 func CurrentBranch(path string) string {
 	args := []string{"rev-parse", "--abbrev-ref", "HEAD"}
 	cmd := exec.Command("git", args...)

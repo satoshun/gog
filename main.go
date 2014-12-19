@@ -119,7 +119,10 @@ func main() {
 						wg.Add(1)
 						go func(d string) {
 							git := git.NewGit(d)
-							git.Update().Run()
+							if git.HasRemote() {
+								git.Update().Run()
+							}
+
 							wg.Done()
 						}(d)
 					}

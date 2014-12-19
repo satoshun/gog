@@ -59,7 +59,7 @@ func srcPath(c *cli.Context) string {
 func main() {
 	app := cli.NewApp()
 	app.Name = "gog"
-	app.Version = "0.2.2"
+	app.Version = "0.3.0"
 	app.Usage = "structure directory like Go"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{

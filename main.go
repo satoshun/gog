@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/codegangsta/cli"
+	"github.com/satoshun/go-git"
 )
 
 // SplitRepo split url to host, path, basename
@@ -59,7 +60,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "gog"
 	app.Version = "0.2.2"
-	app.Usage = "use directory like Go"
+	app.Usage = "structure directory like Go"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "base, b",
@@ -79,7 +80,7 @@ func main() {
 				}
 
 				directory := ProjectDir(c, repository)
-				cmd := CloneCmd(repository, directory)
+				cmd := git.NewGit(directory).Clone(repository)
 				err := cmd.Run()
 				if err != nil {
 					fmt.Println("fail command:", err)
@@ -87,7 +88,7 @@ func main() {
 				}
 
 				host, p, base := SplitRepo(repository)
-				cmd = HookCmd(map[string]string{
+				cmd = hookCmd(map[string]string{
 					"Directory":   directory,
 					"Repository":  repository,
 					"Host":        host,
@@ -117,8 +118,8 @@ func main() {
 						fmt.Println("update", d)
 						wg.Add(1)
 						go func(d string) {
-							cmd := UpdateCmd(d)
-							cmd.Run()
+							git := git.NewGit(d)
+							git.Update().Run()
 							wg.Done()
 						}(d)
 					}
@@ -128,8 +129,8 @@ func main() {
 				}
 
 				directory := ProjectDir(c, repository)
-				cmd := UpdateCmd(directory)
-				err := cmd.Run()
+				git := git.NewGit(directory)
+				err := git.Update().Run()
 				if err != nil {
 					fmt.Println("fail command:", err)
 					return
@@ -159,7 +160,8 @@ func main() {
 				f := "%-" + strconv.Itoa(maxLen+2) + "s"
 				for _, d := range paths {
 					fmt.Printf(f, d["path"])
-					LogCmd(d["full"]).Run()
+					git := git.NewGit(d["full"])
+					git.LogOneline().Run()
 				}
 			},
 		},

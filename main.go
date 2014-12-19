@@ -13,8 +13,8 @@ import (
 	"github.com/satoshun/go-git"
 )
 
-// SplitRepo split url to host, path, basename
-func SplitRepo(u string) (host, p, basename string) {
+// splitRepo split url to host, path, basename
+func splitRepo(u string) (host, p, basename string) {
 	if i := strings.Index(u, "@"); i >= 0 {
 		u = u[i+1:]
 		tmp := strings.SplitN(u, ":", 2)
@@ -37,12 +37,12 @@ func SplitRepo(u string) (host, p, basename string) {
 	return
 }
 
-func ProjectDir(c *cli.Context, d string) string {
-	host, p, _ := SplitRepo(d)
-	return path.Join(SrcPath(c), host, p)
+func projectDir(c *cli.Context, d string) string {
+	host, p, _ := splitRepo(d)
+	return path.Join(srcPath(c), host, p)
 }
 
-func BasePath(c *cli.Context) string {
+func basePath(c *cli.Context) string {
 	for _, ca := range [...]string{c.String("base"), os.Getenv("GOG_PATH"), os.Getenv("GOPATH")} {
 		if ca != "" {
 			return ca
@@ -52,8 +52,8 @@ func BasePath(c *cli.Context) string {
 	return "./"
 }
 
-func SrcPath(c *cli.Context) string {
-	return BasePath(c)
+func srcPath(c *cli.Context) string {
+	return basePath(c)
 }
 
 func main() {
@@ -79,7 +79,7 @@ func main() {
 					return
 				}
 
-				directory := ProjectDir(c, repository)
+				directory := projectDir(c, repository)
 				cmd := git.NewGit(directory).Clone(repository)
 				err := cmd.Run()
 				if err != nil {
@@ -87,7 +87,7 @@ func main() {
 					return
 				}
 
-				host, p, base := SplitRepo(repository)
+				host, p, base := splitRepo(repository)
 				cmd = hookCmd(map[string]string{
 					"Directory":   directory,
 					"Repository":  repository,
@@ -114,7 +114,7 @@ func main() {
 				if repository == "" {
 					// all update
 					var wg sync.WaitGroup
-					for _, d := range GitDiretories(SrcPath(c)) {
+					for _, d := range GitDiretories(srcPath(c)) {
 						fmt.Println("update", d)
 						wg.Add(1)
 						go func(d string) {
@@ -128,7 +128,7 @@ func main() {
 					return
 				}
 
-				directory := ProjectDir(c, repository)
+				directory := projectDir(c, repository)
 				git := git.NewGit(directory)
 				err := git.Update().Run()
 				if err != nil {
@@ -143,7 +143,7 @@ func main() {
 			Usage:     "list cloned repository",
 			Action: func(c *cli.Context) {
 				var paths []map[string]string
-				srcPath := SrcPath(c) + "/"
+				srcPath := srcPath(c) + "/"
 				maxLen := 0
 
 				for _, d := range GitDiretories(srcPath) {

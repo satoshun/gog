@@ -13,7 +13,7 @@ func actionUpdate(c *cli.Context) {
 	if repository == "" {
 		// all update
 		var wg sync.WaitGroup
-		for _, d := range GitDiretories(srcPath(c)) {
+		for _, d := range GitDiretories(basePath(c)) {
 			fmt.Println("update", d)
 			wg.Add(1)
 			go func(d string) {

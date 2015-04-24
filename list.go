@@ -11,7 +11,7 @@ import (
 
 func actionList(c *cli.Context) {
 	var paths []map[string]string
-	srcPath := srcPath(c) + "/"
+	srcPath := basePath(c) + "/"
 	maxLen := 0
 
 	for _, d := range GitDiretories(srcPath) {

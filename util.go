@@ -34,7 +34,7 @@ func GitDiretories(root string) []string {
 
 func projectDir(c *cli.Context, d string) string {
 	host, p, _ := splitRepo(d)
-	return path.Join(srcPath(c), host, p)
+	return path.Join(basePath(c), host, p)
 }
 
 func basePath(c *cli.Context) string {
@@ -45,10 +45,6 @@ func basePath(c *cli.Context) string {
 	}
 
 	return "./"
-}
-
-func srcPath(c *cli.Context) string {
-	return basePath(c)
 }
 
 // splitRepo split url to host, path, basename

@@ -9,7 +9,7 @@ import (
 func main() {
 	app := cli.NewApp()
 	app.Name = "gog"
-	app.Version = "0.3.0"
+	app.Version = "0.4.0"
 	app.Usage = "structure directory like Go"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{

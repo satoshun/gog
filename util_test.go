@@ -6,7 +6,7 @@ import (
 
 func TestSplitRepo(t *testing.T) {
 	// git protocol
-	host, path, base := SplitRepo("git@github.com:satoshun/pythonjs.git")
+	host, path, base := splitRepo("git@github.com:satoshun/pythonjs.git")
 	if host != "github.com" {
 		t.Errorf("invalid host github.com", host)
 	}
@@ -18,7 +18,7 @@ func TestSplitRepo(t *testing.T) {
 	}
 
 	// http, https protocol
-	host, path, base = SplitRepo("https://github.com/satoshun/pythonjs.git")
+	host, path, base = splitRepo("https://github.com/satoshun/pythonjs.git")
 	if host != "github.com" {
 		t.Errorf("invalid host github.com", host)
 	}

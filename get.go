@@ -1,41 +1,34 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/codegangsta/cli"
 	"github.com/satoshun/go-git"
 )
 
 func actionGet(c *cli.Context) {
-	repository := c.Args().First()
-	if repository == "" {
-		fmt.Println("please set repository url")
-		return
+	rURL := c.Args().First()
+	if rURL == "" {
+		log.Fatal("please set repository url")
 	}
 
-	directory := projectDir(c, repository)
-	cmd := git.NewGit(directory).Clone(repository)
-	err := cmd.Run()
-	if err != nil {
-		fmt.Println("fail command:", err)
-		return
+	cwd := projectDir(c, rURL)
+	cmd := git.NewGit(cwd).Clone(rURL)
+	if err := cmd.Run(); err != nil {
+		log.Fatal(err)
 	}
 
-	host, p, base := splitRepo(repository)
+	host, p, base := splitRepo(rURL)
 	cmd = hookCmd(map[string]string{
-		"Directory":   directory,
-		"Repository":  repository,
+		"Directory":   cwd,
+		"Repository":  rURL,
 		"Host":        host,
 		"Path":        p,
 		"ProjectName": base,
 	})
 
-	if cmd != nil {
-		err = cmd.Run()
-		if err != nil {
-			fmt.Println("fail hook command:", cmd, err)
-			return
-		}
+	if err := cmd.Run(); err != nil {
+		log.Fatal(err)
 	}
 }

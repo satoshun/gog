@@ -13,7 +13,7 @@ func actionUpdate(c *cli.Context) {
 	// if no specified repository url then all update
 	if rURL == "" {
 		var wg sync.WaitGroup
-		for _, d := range GitDiretories(basePath(c)) {
+		for _, d := range retriveGitDirs(basePath(c)) {
 			log.Println("update", d)
 			wg.Add(1)
 			go func(d string) {

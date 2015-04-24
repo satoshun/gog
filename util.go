@@ -18,7 +18,7 @@ func Exists(p string) bool {
 
 }
 
-func GitDiretories(root string) []string {
+func retriveGitDirs(root string) []string {
 	l := make([]string, 0)
 	filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
 		if !info.IsDir() || !Exists(path.Join(p, ".git")) {

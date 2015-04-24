@@ -14,7 +14,7 @@ func actionList(c *cli.Context) {
 	cwd := basePath(c) + "/"
 	maxLen := 0
 
-	for _, d := range GitDiretories(cwd) {
+	for _, d := range retriveGitDirs(cwd) {
 		path := strings.TrimPrefix(d, cwd)
 		if len(path) > maxLen {
 			maxLen = len(path)

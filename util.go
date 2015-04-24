@@ -18,8 +18,7 @@ func Exists(p string) bool {
 
 }
 
-func retriveGitDirs(root string) []string {
-	l := make([]string, 0)
+func retriveGitDirs(root string) (l []string) {
 	filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
 		if !info.IsDir() || !Exists(path.Join(p, ".git")) {
 			return nil
@@ -29,7 +28,7 @@ func retriveGitDirs(root string) []string {
 		return filepath.SkipDir
 	})
 
-	return l
+	return
 }
 
 func projectDir(c *cli.Context, d string) string {

@@ -11,11 +11,11 @@ import (
 
 func actionList(c *cli.Context) {
 	var paths []map[string]string
-	srcPath := basePath(c) + "/"
+	cwd := basePath(c) + "/"
 	maxLen := 0
 
-	for _, d := range GitDiretories(srcPath) {
-		path := strings.TrimPrefix(d, srcPath)
+	for _, d := range GitDiretories(cwd) {
+		path := strings.TrimPrefix(d, cwd)
 		if len(path) > maxLen {
 			maxLen = len(path)
 		}

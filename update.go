@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"sync"
 
 	"github.com/codegangsta/cli"
@@ -9,12 +9,12 @@ import (
 )
 
 func actionUpdate(c *cli.Context) {
-	repository := c.Args().First()
-	if repository == "" {
-		// all update
+	rURL := c.Args().First()
+	// if no specified repository url then all update
+	if rURL == "" {
 		var wg sync.WaitGroup
 		for _, d := range GitDiretories(basePath(c)) {
-			fmt.Println("update", d)
+			log.Println("update", d)
 			wg.Add(1)
 			go func(d string) {
 				git := git.NewGit(d)
@@ -30,11 +30,9 @@ func actionUpdate(c *cli.Context) {
 		return
 	}
 
-	directory := projectDir(c, repository)
+	directory := projectDir(c, rURL)
 	git := git.NewGit(directory)
-	err := git.Update().Run()
-	if err != nil {
-		fmt.Println("fail command:", err)
-		return
+	if err := git.Update().Run(); err != nil {
+		log.Fatal(err)
 	}
 }

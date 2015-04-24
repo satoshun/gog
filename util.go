@@ -43,7 +43,11 @@ func basePath(c *cli.Context) string {
 		}
 	}
 
-	return "./"
+	return path.Join(os.Getenv("HOME"), "git")
+}
+
+func linkPath(c *cli.Context, l string) string {
+	return path.Join(basePath(c), "link", l)
 }
 
 // splitRepo split url to host, path, basename

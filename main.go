@@ -22,7 +22,13 @@ func main() {
 			Name:      "get",
 			ShortName: "g",
 			Usage:     "clone repository",
-			Action:    actionGet,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "link, s, l",
+					Usage: "use symbolic link",
+				},
+			},
+			Action: actionGet,
 		},
 		{
 			Name:      "update",

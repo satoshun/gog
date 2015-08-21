@@ -53,19 +53,23 @@ func actionGet(c *cli.Context) {
 
 func actionUpdate(c *cli.Context) {
 	rURL := c.Args().First()
-	// if no specified repository url then all update
+	// no specified repository url then all update
 	if rURL == "" {
 		var wg sync.WaitGroup
+		makeWorkerPool(func(d string) {
+			git := git.NewGit(d)
+			if git.HasRemote() {
+				git.Update().Run()
+			}
+
+			wg.Done()
+		})
 		for _, d := range retriveGitDirs(basePath(c)) {
 			log.Println("update", d)
 			wg.Add(1)
-			go func(d string) {
-				git := git.NewGit(d)
-				if git.HasRemote() {
-					git.Update().Run()
-				}
-
-				wg.Done()
+			go func(url string) {
+				channel := <-workerPool
+				channel <- url
 			}(d)
 		}
 

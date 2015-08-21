@@ -10,7 +10,7 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-func Exists(p string) bool {
+func exists(p string) bool {
 	if _, err := os.Stat(p); err == nil {
 		return true
 	}
@@ -20,7 +20,7 @@ func Exists(p string) bool {
 
 func retriveGitDirs(root string) (l []string) {
 	filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
-		if !info.IsDir() || !Exists(path.Join(p, ".git")) {
+		if !info.IsDir() || !exists(path.Join(p, ".git")) {
 			return nil
 		}
 

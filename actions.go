@@ -11,7 +11,25 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/satoshun/go-git"
+	"github.com/satoshun/goworker"
 )
+
+const workerSize = 25
+
+type updateTask struct {
+	dir string
+	wg  *sync.WaitGroup
+}
+
+func (t *updateTask) Run() {
+	git := git.NewGit(t.dir)
+	if git.HasRemote() {
+		log.Println("Update", t.dir)
+		git.Update().Run()
+	}
+
+	t.wg.Done()
+}
 
 func actionGet(c *cli.Context) {
 	rURL := c.Args().First()
@@ -55,22 +73,13 @@ func actionUpdate(c *cli.Context) {
 	rURL := c.Args().First()
 	// no specified repository url then all update
 	if rURL == "" {
-		var wg sync.WaitGroup
-		makeWorkerPool(func(d string) {
-			git := git.NewGit(d)
-			if git.HasRemote() {
-				git.Update().Run()
-			}
+		service := goworker.NewService(workerSize)
+		go service.Start()
 
-			wg.Done()
-		})
+		wg := new(sync.WaitGroup)
 		for _, d := range retriveGitDirs(basePath(c)) {
-			log.Println("update", d)
 			wg.Add(1)
-			go func(url string) {
-				channel := <-workerPool
-				channel <- url
-			}(d)
+			service.RunTask(&updateTask{dir: d, wg: wg})
 		}
 
 		wg.Wait()

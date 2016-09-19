@@ -17,7 +17,6 @@ func hookCmd(maps map[string]string) (cmd *exec.Cmd) {
 	tmpl.Execute(&doc, maps)
 
 	cmd = shellCmd(doc.String())
-
 	return
 }
 
@@ -25,6 +24,5 @@ func shellCmd(script string) (cmd *exec.Cmd) {
 	cmd = exec.Command("/bin/sh", "-c", script)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-
 	return
 }

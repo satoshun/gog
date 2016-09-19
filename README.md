@@ -1,6 +1,6 @@
 # gog
 
-this is tools for used convenience git like go. i called gog.
+this tools is management of git repositories, like golang.
 
 
 ## Description
@@ -9,11 +9,10 @@ Go have special direcotry structure. i love it so other languages want to use it
 
 ## install
 
-for macOS
+Use go command
 
 ```
-$ brew tap satoshun/commands
-$ brew install gog
+go get github.com/satoshun/gog
 ```
 
 ## Usage

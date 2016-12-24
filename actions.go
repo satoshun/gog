@@ -9,9 +9,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/codegangsta/cli"
 	"github.com/satoshun/go-git"
 	"github.com/satoshun/goworker"
+	"github.com/urfave/cli"
 )
 
 const workerSize = 25

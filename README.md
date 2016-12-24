@@ -1,5 +1,7 @@
 # gog
 
+[![Build Status](https://travis-ci.org/satoshun/gog.svg?branch=master)](https://travis-ci.org/satoshun/gog)
+
 this tools is management of git repositories, like golang.
 
 

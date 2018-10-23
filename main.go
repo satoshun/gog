@@ -3,13 +3,13 @@ package main
 import (
 	"os"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 )
 
 func main() {
 	app := cli.NewApp()
 	app.Name = "gog"
-	app.Version = "0.5.1"
+	app.Version = "0.6.0"
 	app.Usage = "Construct a directory structure like Go"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
